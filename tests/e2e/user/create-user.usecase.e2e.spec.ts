@@ -3,14 +3,14 @@ import { app } from "../../../src/http/server";
 import  request  from "supertest"
 import { prisma } from "../../../src/infra/prisma";
 
-describe('Create User - e2e', ()=> {
+describe('Create User - e2e Test', ()=> {
   beforeAll(async () => {
     await app.ready()
-    await prisma.user.deleteMany({})
+    await prisma.user.deleteMany()
   })
 
   afterAll(async () => {
-    await prisma.user.deleteMany({})
+    await prisma.user.deleteMany()
     await app.close()
   })
 

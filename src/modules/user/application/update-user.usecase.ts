@@ -1,9 +1,10 @@
-import { EmailInUseError } from "../../../core/errors/EmailInUseError";
-import { UserNotFound } from "../../../core/errors/UserNotFound";
-import { UpdateUserData, userRepository } from "../domain/user.interface";
+import { EmailInUseError } from "../../../core/errors/email-in-user-error";
+import { UserNotFound } from "../../../core/errors/user-not-found";
+import type { UpdateUserData, UserRepository } from "../domain/user.interface";
+
 
 export class UpdateUserUseCase {
-  constructor(private userRepository: userRepository) {}
+  constructor(private userRepository: UserRepository) {}
 
   async update(id: string, data: UpdateUserData) {
     try {

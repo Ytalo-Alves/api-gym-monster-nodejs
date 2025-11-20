@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest'
 import { InMemoryUserRepository } from '../../../src/modules/user/infra/in-memory/in-memory-user-repository'
 import { CreateUserUseCase } from '../../../src/modules/user/application/create-user.usecase';
-import { EmailInUseError } from '../../../src/core/errors/EmailInUseError';
+import { EmailInUseError } from '../../../src/core/errors/email-in-user-error';
 
   const repo = new InMemoryUserRepository();
   const sut = new CreateUserUseCase(repo)

@@ -5,3 +5,4 @@ node_modules
 generated
 dev.db
 test.db
+coverage

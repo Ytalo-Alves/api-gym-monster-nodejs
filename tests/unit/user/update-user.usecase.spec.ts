@@ -3,7 +3,7 @@ import { InMemoryUserRepository } from "../../../src/modules/user/infra/in-memor
 import { CreateUserUseCase } from "../../../src/modules/user/application/create-user.usecase";
 import { UpdateUserUseCase } from "../../../src/modules/user/application/update-user.usecase";
 import { email } from "zod";
-import { EmailInUseError } from "../../../src/core/errors/EmailInUseError";
+import { EmailInUseError } from "../../../src/core/errors/email-in-user-error";
 
 let repo: InMemoryUserRepository;
 let createUser: CreateUserUseCase;

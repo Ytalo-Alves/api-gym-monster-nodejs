@@ -3,7 +3,7 @@ import { app } from "../../../src/http/server";
 import { prisma } from "../../../src/infra/prisma";
 import request from "supertest";
 
-describe("Update user - e2e", () => {
+describe("Update user - e2e Test", () => {
   beforeAll(async () => {
     await app.ready();
     await prisma.user.deleteMany();

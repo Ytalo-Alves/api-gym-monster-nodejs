@@ -1,9 +1,9 @@
 import { hash } from "bcryptjs"
-import { CreateUserData, userRepository } from "../domain/user.interface"
-import { EmailInUseError } from "../../../core/errors/EmailInUseError"
+import { EmailInUseError } from "../../../core/errors/email-in-user-error"
+import type { CreateUserData, UserRepository } from "../domain/user.interface"
 
 export class CreateUserUseCase {
-  constructor(private userRepository: userRepository) {}
+  constructor(private userRepository: UserRepository) {}
 
   async create(data: CreateUserData) {
     const userExists = await this.userRepository.findByEmail(data.email)

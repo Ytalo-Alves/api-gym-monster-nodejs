@@ -1,12 +1,12 @@
 import { randomUUID } from "crypto";
 import type { User, UserWithPassword } from "../../domain/user.entity";
-import type { CreateUserData, UpdateUserData, userRepository } from "../../domain/user.interface";
 import { hash } from "bcryptjs";
+import type { CreateUserData, UpdateUserData, UserRepository } from "../../domain/user.interface";
 
 
 
 
-export class InMemoryUserRepository implements userRepository {
+export class InMemoryUserRepository implements UserRepository {
   public users: UserWithPassword[] = [];
 
   async create(data: CreateUserData): Promise<User> {

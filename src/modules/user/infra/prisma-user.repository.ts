@@ -1,9 +1,9 @@
-import { User } from "../domain/user.entity";
-import { CreateUserData, UpdateUserData, userRepository } from "../domain/user.interface";
+import { User, type UserWithPassword } from "../domain/user.entity";
+import { CreateUserData, UpdateUserData, UserRepository } from "../domain/user.interface";
 import { prisma } from "../../../infra/prisma";
 
 
-export class PrismaUserRepository implements userRepository {
+export class PrismaUserRepository implements UserRepository {
   async update(id: string, data: UpdateUserData) {
     // Use updateMany + findUnique as a workaround for intermittent adapter timeouts
     await prisma.user.updateMany({ where: { id }, data });
@@ -16,7 +16,6 @@ export class PrismaUserRepository implements userRepository {
       id: user.id,
       name: user.name,
       email: user.email,
-      password: user.password,
       role: user.role as User['role'],
       createdAt: user.createdAt,
     };
@@ -47,19 +46,13 @@ export class PrismaUserRepository implements userRepository {
     };
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(email: string): Promise<UserWithPassword | null> {
     const user = await prisma.user.findUnique({
       where: { email },
     });
 
     if (!user) return null;
 
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role as User['role'],
-      createdAt: user.createdAt,
-    };
+    return user as UserWithPassword;
   }
 }
