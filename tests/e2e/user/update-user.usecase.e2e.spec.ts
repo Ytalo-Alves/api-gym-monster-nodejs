@@ -36,4 +36,38 @@ describe("Update user - e2e", () => {
     expect(updateResponse.statusCode).toBe(200);
     expect(updateResponse.body.name).toBe("User");
   });
+
+  it("Should not be able allow duplicate email on update", async () => {
+    // Create first user with a specific email
+    const firstUserResponse = await request(app.server)
+      .post("/create-user")
+      .send({
+        name: "User One",
+        email: "duplicate@email.com",
+        password: "123456",
+        role: "admin",
+      })
+      .expect(201);
+
+    // Create second user with a different email
+    const secondUserResponse = await request(app.server)
+      .post("/create-user")
+      .send({
+        name: "User Two",
+        email: "unique@email.com",
+        password: "123456",
+        role: "admin",
+      })
+      .expect(201);
+
+    // Attempt to update second user's email to the duplicate email
+    const updateResponse = await request(app.server)
+      .put(`/update-user/${secondUserResponse.body.id}`)
+      .send({
+        email: "duplicate@email.com",
+      });
+
+    // Expect a conflict response (409) for duplicate email
+    expect(updateResponse.statusCode).toBe(409);
+  });
 });
