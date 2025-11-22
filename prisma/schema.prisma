@@ -1,5 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator client {
   provider = "prisma-client"
   output   = "../generated"
@@ -18,4 +16,103 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("users")
+}
+
+model Student {
+  id                    String     @id @default(uuid())
+  name                  String
+  email                 String     @unique
+  phone                 String
+  cpf                   String     @unique
+  dateOfBirth           DateTime
+  gender                Gender
+  cep                   String
+  address               String
+  numberAddress         String
+  neighborhood          String
+  city                  String
+  state                 String
+  emergencyContact      String?
+  emergencyContactPhone String?
+  observation           String?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  contracts             Contract[]
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+model Plan {
+  id          String     @id @default(uuid())
+  name        String
+  duration    Int // em meses
+  price       Decimal
+  description String?
+  status      PlanStatus @default(ACTIVE)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  contracts Contract[] // Relacionamento com contratos de alunos
+}
+
+enum PlanStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Contract {
+  id        String         @id @default(uuid())
+  studentId String
+  planId    String
+  startDate DateTime       @default(now())
+  endDate   DateTime
+  status    ContractStatus @default(ACTIVE)
+  pricePaid Decimal
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  student  Student   @relation(fields: [studentId], references: [id])
+  plan     Plan      @relation(fields: [planId], references: [id])
+  payments Payment[]
+}
+
+enum ContractStatus {
+  ACTIVE // contrato válido
+  PAUSED // congelamento temporário
+  CANCELED // cancelado antes do fim
+  EXPIRED // terminou normalmente
+}
+
+model Payment {
+  id            String         @id @default(uuid())
+  contractId    String
+  amount        Decimal
+  dueDate       DateTime
+  paidAt        DateTime?
+  status        PaymentStatus  @default(PENDING)
+  method        PaymentMethod?
+  transactionId String? // id de gateway externo
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  contract Contract @relation(fields: [contractId], references: [id])
+}
+
+enum PaymentStatus {
+  PENDING // aguardando pagamento
+  PAID // pago
+  LATE // atrasado
+  CANCELED // cancelado
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  CASH // dinheiro
+  BANK_SLIP // boleto
 }
