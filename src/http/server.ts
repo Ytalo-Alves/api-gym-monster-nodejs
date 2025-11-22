@@ -3,6 +3,8 @@ import { userRoutes } from "../modules/user/presentation/routes/user.routes";
 import { ErrorHandler } from "./error-handler";
 import jwt from "@fastify/jwt";
 import { authenticateRoutes } from "../modules/auth/presentation/routes/authenticate.routes";
+import { studentRoutes } from "../modules/student/presentation/routes/student.routes";
+import { planRoutes } from "../modules/plan/presentation/routes/plan.routes";
 
 export const app = fastify();
 
@@ -14,3 +16,5 @@ app.setErrorHandler(ErrorHandler);
 
 app.register(userRoutes);
 app.register(authenticateRoutes);
+app.register(studentRoutes, { prefix: "students" });
+app.register(planRoutes, { prefix: "plans" });
