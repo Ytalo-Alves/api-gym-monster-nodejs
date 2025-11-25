@@ -6,3 +6,5 @@ generated
 dev.db
 test.db
 coverage
+uploads/
+.DS_Store
