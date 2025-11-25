@@ -6,7 +6,9 @@ export async function authenticate(
 ) {
   try {
     await request.jwtVerify();
-  } catch {
-    return reply.status(401).send({message: 'Unauthorized'})
+  } catch (err) {
+    console.log("Auth Error:", err);
+    console.log("Headers:", request.headers);
+    return reply.status(401).send({ message: "Unauthorized" });
   }
 }
