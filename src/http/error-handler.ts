@@ -23,7 +23,30 @@ export function ErrorHandler(
     })
   }
 
+  // Log error for debugging
+  console.error('=== UNHANDLED ERROR ===');
+  console.error('Error:', error);
+  console.error('Error details:', {
+    message: error.message,
+    code: (error as any)?.code,
+    name: error.name,
+    stack: error.stack,
+  });
 
+  // Se for um erro do Prisma, tentar extrair mais informações
+  const prismaError = error as any;
+  if (prismaError?.code) {
+    console.error('Prisma error code:', prismaError.code);
+    console.error('Prisma error meta:', prismaError.meta);
+  }
+  
+  // Log do request se disponível
+  if (_request) {
+    console.error('Request method:', _request.method);
+    console.error('Request URL:', _request.url);
+    console.error('Request params:', _request.params);
+  }
+  console.error('========================');
 
   return reply.status(500).send({
     status:'error',
