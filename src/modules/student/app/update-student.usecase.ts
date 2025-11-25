@@ -1,5 +1,8 @@
 import { Student, UpdateStudentData } from "../domain/student.entity";
 import { StudentRepository } from "../domain/student.repository";
+import { StudentNotFoundError } from "../../../core/errors/student-not-found";
+import { StudentEmailAlreadyExistsError } from "../../../core/errors/student-email-already-exists";
+import { StudentCpfAlreadyExistsError } from "../../../core/errors/student-cpf-already-exists";
 
 export class UpdateStudentUseCase {
   constructor(private studentRepository: StudentRepository) {}
@@ -7,7 +10,7 @@ export class UpdateStudentUseCase {
   async execute(id: string, data: UpdateStudentData): Promise<Student> {
     const student = await this.studentRepository.findById(id);
     if (!student) {
-      throw new Error("Student not found.");
+      throw new StudentNotFoundError();
     }
 
     if (data.email) {
@@ -15,14 +18,14 @@ export class UpdateStudentUseCase {
         data.email
       );
       if (emailAlreadyExists && emailAlreadyExists.id !== id) {
-        throw new Error("Email already in use by another student.");
+        throw new StudentEmailAlreadyExistsError();
       }
     }
 
     if (data.cpf) {
       const cpfAlreadyExists = await this.studentRepository.findByCpf(data.cpf);
       if (cpfAlreadyExists && cpfAlreadyExists.id !== id) {
-        throw new Error("CPF already in use by another student.");
+        throw new StudentCpfAlreadyExistsError();
       }
     }
 

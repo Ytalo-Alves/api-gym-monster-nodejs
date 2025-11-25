@@ -1,5 +1,7 @@
 import { CreateStudentData, Student } from "../domain/student.entity";
 import { StudentRepository } from "../domain/student.repository";
+import { StudentEmailAlreadyExistsError } from "../../../core/errors/student-email-already-exists";
+import { StudentCpfAlreadyExistsError } from "../../../core/errors/student-cpf-already-exists";
 
 export class CreateStudentUseCase {
   constructor(private studentRepository: StudentRepository) {}
@@ -9,12 +11,12 @@ export class CreateStudentUseCase {
       data.email
     );
     if (studentAlreadyExists) {
-      throw new Error("Student already exists with this email.");
+      throw new StudentEmailAlreadyExistsError();
     }
 
     const cpfAlreadyExists = await this.studentRepository.findByCpf(data.cpf);
     if (cpfAlreadyExists) {
-      throw new Error("Student already exists with this CPF.");
+      throw new StudentCpfAlreadyExistsError();
     }
 
     return this.studentRepository.create(data);
