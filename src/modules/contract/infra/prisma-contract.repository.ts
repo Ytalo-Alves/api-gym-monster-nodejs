@@ -60,4 +60,14 @@ export class PrismaContractRepository implements ContractRepository {
 
     return contract as unknown as ContractWithPlan | null;
   }
+
+  async countByPlanId(planId: string): Promise<number> {
+    const count = await prisma.contract.count({
+      where: {
+        planId,
+      },
+    });
+
+    return count;
+  }
 }
