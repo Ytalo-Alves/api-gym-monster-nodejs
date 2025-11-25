@@ -68,6 +68,6 @@ describe("Plan - e2e Test", () => {
     expect(response.statusCode).toBe(204);
 
     const getResponse = await request(app.server).get(`/plans/${planId}`);
-    expect(getResponse.statusCode).toBe(500); // Or 404 if error handling maps it
+    expect(getResponse.statusCode).toBe(404);
   });
 });

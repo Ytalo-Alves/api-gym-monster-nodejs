@@ -40,19 +40,19 @@ describe("Authenticate User - e2e Test", async () => {
     );
   });
 
-  it('Should not be able to authenticate with invalid credentials', async () => {
+  it("Should not be able to authenticate with invalid credentials", async () => {
     const response = await request(app.server)
-    .post('/authenticate')
-    .send({
-      email: 'userauth@email.com',
-      password: 'wrong-password'
-    })
-    .expect(401)
+      .post("/authenticate")
+      .send({
+        email: "userauth@email.com",
+        password: "wrong-password",
+      })
+      .expect(401);
 
     expect(response.body).toEqual(
       expect.objectContaining({
-        message: 'Unauthorized'
+        message: "Email ou senha inválidos",
       })
-    )
-  })
+    );
+  });
 });
