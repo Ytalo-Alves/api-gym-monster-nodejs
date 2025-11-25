@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "tsx --watch src/index.ts",
-    "test": "DATABASE_URL='file:./dev.db' VITEST_MODE=unit vitest run tests/unit && DATABASE_URL='file:./test.db' VITEST_MODE=e2e NODE_ENV=test vitest run tests/e2e --fileParallelism=false",
+    "test": "DATABASE_URL='file:./dev.db' VITEST_MODE=unit vitest run tests/unit && DATABASE_URL='file:./test.db' prisma db push && DATABASE_URL='file:./test.db' VITEST_MODE=e2e NODE_ENV=test vitest run tests/e2e --fileParallelism=false",
     "test:unit": "DATABASE_URL='file:./dev.db' VITEST_MODE=unit vitest run tests/unit",
-    "test:e2e": "DATABASE_URL='file:./test.db' VITEST_MODE=e2e NODE_ENV=test vitest run tests/e2e --fileParallelism=false",
+    "test:e2e": "DATABASE_URL='file:./test.db' prisma db push && DATABASE_URL='file:./test.db' VITEST_MODE=e2e NODE_ENV=test vitest run tests/e2e --fileParallelism=false",
     "test:watch": "vitest --watch",
     "studio": "DATABASE_URL='file:./dev.db' prisma studio",
     "studio:test": "DATABASE_URL='file:./test.db' prisma studio",
