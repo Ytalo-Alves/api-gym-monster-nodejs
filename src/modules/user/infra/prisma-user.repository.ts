@@ -1,7 +1,10 @@
 import { User, type UserWithPassword } from "../domain/user.entity";
-import { CreateUserData, UpdateUserData, UserRepository } from "../domain/user.interface";
+import {
+  CreateUserData,
+  UpdateUserData,
+  UserRepository,
+} from "../domain/user.interface";
 import { prisma } from "../../../infra/prisma";
-
 
 export class PrismaUserRepository implements UserRepository {
   async update(id: string, data: UpdateUserData) {
@@ -10,18 +13,19 @@ export class PrismaUserRepository implements UserRepository {
 
     const user = await prisma.user.findUnique({ where: { id } });
 
-    if (!user) throw new Error('User not found after update');
+    if (!user) throw new Error("User not found after update");
 
     return {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role as User['role'],
+      role: user.role as User["role"],
+      avatarUrl: user.avatarUrl,
       createdAt: user.createdAt,
     };
   }
-  
-  async findById(id: string): Promise<User | null> {
+
+  async findById(id: string): Promise<UserWithPassword | null> {
     const user = await prisma.user.findUnique({ where: { id } });
 
     if (!user) return null;
@@ -30,8 +34,10 @@ export class PrismaUserRepository implements UserRepository {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role as User['role'],
+      role: user.role as User["role"],
+      avatarUrl: user.avatarUrl,
       createdAt: user.createdAt,
+      password: user.password,
     };
   }
   async create(data: CreateUserData): Promise<User> {
@@ -41,7 +47,8 @@ export class PrismaUserRepository implements UserRepository {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role as User['role'],
+      role: user.role as User["role"],
+      avatarUrl: user.avatarUrl,
       createdAt: user.createdAt,
     };
   }
@@ -53,6 +60,10 @@ export class PrismaUserRepository implements UserRepository {
 
     if (!user) return null;
 
-    return user as UserWithPassword;
+    return {
+      ...user,
+      role: user.role as User["role"],
+      avatarUrl: user.avatarUrl,
+    };
   }
 }
